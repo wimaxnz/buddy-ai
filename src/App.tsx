@@ -1,8 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
-import { emergencyStop, getStoredAuth } from '@/api/client'
-import { useLiveData, useSettings, useWeather } from '@/api/hooks'
+import { useEffect, useState } from 'react'
+import { getStoredAuth } from '@/api/client'
+import { LiveDataProvider } from '@/context/LiveDataContext'
+import { ThemeProvider } from '@/context/ThemeProvider'
+import { ToastProvider } from '@/context/ToastProvider'
 import { EmergencyFab, MobileNav, Sidebar, TopBar } from '@/components/layout/AppShell'
 import { LoginGate } from '@/components/layout/LoginGate'
+import { emergencyStop } from '@/api/client'
+import { useLiveDataContext } from '@/context/LiveDataContext'
 import { navItem, type ScreenId } from '@/navigation'
 import { HomeScreen } from '@/screens/HomeScreen'
 import { BuddyScreen } from '@/screens/BuddyScreen'
@@ -21,20 +25,17 @@ function readInitialScreen(): ScreenId {
   return allowed.includes(hash as ScreenId) ? (hash as ScreenId) : 'home'
 }
 
-export default function App() {
-  const [authed, setAuthed] = useState(!!getStoredAuth())
+function AppRoutes() {
   const [screen, setScreen] = useState<ScreenId>(readInitialScreen)
-  const { data: live } = useLiveData(authed)
-  const { data: weather } = useWeather(authed)
-  const { settings, refresh: refreshSettings, loading: settingsLoading } = useSettings(authed)
+  const { live, settings, weather, loading, refreshSettings } = useLiveDataContext()
+  const item = navItem(screen)
+  const online = live?.online ?? false
 
   useEffect(() => {
     window.location.hash = screen
   }, [screen])
 
-  const onNavigate = useCallback((id: ScreenId) => setScreen(id), [])
-  const item = navItem(screen)
-  const online = live?.online ?? false
+  const onNavigate = (id: ScreenId) => setScreen(id)
 
   const onEmergency = async () => {
     if (!confirm('Emergency stop Buddy now?')) return
@@ -42,50 +43,27 @@ export default function App() {
   }
 
   const renderScreen = () => {
-    if (settingsLoading && !settings) {
-      return <div className="screen-loading">Loading settings…</div>
-    }
-    if (!settings) {
-      return <div className="screen-loading">Could not load settings.</div>
+    if (loading && !settings && screen !== 'photos') {
+      return <div className="screen-loading">Loading…</div>
     }
     switch (screen) {
-      case 'home':
-        return <HomeScreen live={live} weather={weather} settings={settings} />
-      case 'buddy':
-        return <BuddyScreen settings={settings} live={live} onSaved={() => refreshSettings()} />
-      case 'camera':
-        return <CameraScreen settings={settings} live={live} onSaved={() => refreshSettings()} />
-      case 'family':
-        return <FamilyScreen settings={settings} onSaved={() => refreshSettings()} />
-      case 'photos':
-        return <PhotosScreen />
-      case 'memory':
-        return <MemoryScreen settings={settings} onSaved={() => refreshSettings()} />
-      case 'clock-weather':
-        return <ClockWeatherScreen settings={settings} weather={weather} onSaved={() => refreshSettings()} />
-      case 'routines':
-        return <RoutinesScreen settings={settings} onSaved={() => refreshSettings()} />
-      case 'privacy':
-        return <PrivacyScreen settings={settings} onSaved={() => refreshSettings()} />
-      case 'developer':
-        return <DeveloperScreen settings={settings} onRefreshSettings={() => refreshSettings()} />
-      default:
-        return null
+      case 'home': return <HomeScreen />
+      case 'buddy': return <BuddyScreen />
+      case 'camera': return <CameraScreen />
+      case 'family': return settings ? <FamilyScreen settings={settings} onSaved={refreshSettings} /> : null
+      case 'photos': return <PhotosScreen />
+      case 'memory': return settings ? <MemoryScreen settings={settings} onSaved={refreshSettings} /> : null
+      case 'clock-weather': return settings ? <ClockWeatherScreen settings={settings} weather={weather} onSaved={refreshSettings} /> : null
+      case 'routines': return settings ? <RoutinesScreen settings={settings} onSaved={refreshSettings} /> : null
+      case 'privacy': return settings ? <PrivacyScreen settings={settings} onSaved={refreshSettings} /> : null
+      case 'developer': return <DeveloperScreen />
+      default: return null
     }
-  }
-
-  if (!authed) {
-    return <LoginGate onSuccess={() => setAuthed(true)} />
   }
 
   return (
     <div className="app-shell">
-      <Sidebar
-        active={screen}
-        onNavigate={onNavigate}
-        online={online}
-        subtitle={live?.firmware_build ? String(live.firmware_build) : undefined}
-      />
+      <Sidebar active={screen} onNavigate={onNavigate} online={online} subtitle={live?.firmware_build ? String(live.firmware_build) : undefined} />
       <div className="app-main">
         <TopBar title={item?.label ?? 'Buddy AI'} group={item?.group} online={online} />
         <main className="app-content">{renderScreen()}</main>
@@ -93,5 +71,27 @@ export default function App() {
       <MobileNav active={screen} onNavigate={onNavigate} />
       <EmergencyFab onStop={onEmergency} />
     </div>
+  )
+}
+
+export default function App() {
+  const [authed, setAuthed] = useState(!!getStoredAuth())
+
+  if (!authed) {
+    return (
+      <ThemeProvider>
+        <LoginGate onSuccess={() => setAuthed(true)} />
+      </ThemeProvider>
+    )
+  }
+
+  return (
+    <ThemeProvider>
+      <ToastProvider>
+        <LiveDataProvider>
+          <AppRoutes />
+        </LiveDataProvider>
+      </ToastProvider>
+    </ThemeProvider>
   )
 }

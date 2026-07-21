@@ -1,5 +1,6 @@
 import { MOBILE_NAV, NAV_ITEMS, navItem, type ScreenId } from '@/navigation'
 import { Icon } from '@/components/ui/Icon'
+import { useTheme, type ThemeMode } from '@/context/ThemeProvider'
 
 export function Sidebar({ active, onNavigate, online, subtitle }: {
   active: ScreenId
@@ -50,6 +51,7 @@ export function Sidebar({ active, onNavigate, online, subtitle }: {
 }
 
 export function TopBar({ title, group, online }: { title: string; group?: string; online?: boolean }) {
+  const { mode, setMode } = useTheme()
   return (
     <header className="app-topbar">
       <div className="topbar-title">
@@ -57,8 +59,13 @@ export function TopBar({ title, group, online }: { title: string; group?: string
         {group && <span>{group}</span>}
       </div>
       <div className="topbar-actions">
+        <select className="theme-select" value={mode} onChange={e => setMode(e.target.value as ThemeMode)} aria-label="Theme">
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+          <option value="auto">Auto</option>
+        </select>
         <span className={`chip chip-${online ? 'green' : 'red'}`}>{online ? 'Connected' : 'Offline'}</span>
-        <a className="topbar-classic" href="/dashboard/classic">Classic dashboard</a>
+        <a className="topbar-classic" href="/dashboard/classic">Classic</a>
       </div>
     </header>
   )

@@ -123,13 +123,35 @@ export async function postJson(url: string, body: unknown, devPw?: string) {
   return res.json().catch(() => ({}))
 }
 
+export async function postEmpty(url: string) {
+  const res = await fetch(url, { method: 'POST', credentials: 'include', headers: authHeaders() })
+  if (res.status === 401) {
+    clearStoredAuth()
+    throw new Error('AUTH_REQUIRED')
+  }
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  return res.json().catch(() => ({}))
+}
+
+export async function fetchProviders() {
+  return request<Record<string, unknown>>('/dashboard/providers')
+}
+
+export async function saveProviderKey(providerId: string, apiKey: string) {
+  return postJson('/dashboard/provider-key', { provider_id: providerId, action: 'save', api_key: apiKey })
+}
+
+export async function testProvider(providerId: string) {
+  return postJson('/dashboard/test-provider', { provider_id: providerId })
+}
+
 export async function devCommand(name: string, arg = '', devPw?: string) {
   const body = new URLSearchParams({ name, arg })
   return postForm('/dev/command', body, devPw)
 }
 
 export async function emergencyStop(devPw?: string) {
-  return devCommand('emergency_stop', '', devPw)
+  return devCommand('base_emergency_stop', '', devPw)
 }
 
 export function cameraPreviewUrl(): string {

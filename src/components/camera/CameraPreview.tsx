@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { cameraPreviewUrl, getStoredAuth } from '@/api/client'
 
-export function CameraPreview({ enabled, fps = 3 }: { enabled: boolean; fps?: number }) {
+export function CameraPreview({ enabled, fps = 3, large = false }: { enabled: boolean; fps?: number; large?: boolean }) {
   const [src, setSrc] = useState('')
   const [error, setError] = useState(false)
 
@@ -63,7 +63,7 @@ export function CameraPreview({ enabled, fps = 3 }: { enabled: boolean; fps?: nu
     )
   }
   return (
-    <div className="camera-preview">
+    <div className={`camera-preview${large ? ' camera-preview-large' : ''}`}>
       <img src={src} alt="Live camera preview" />
       <div className="camera-privacy-badge">Live · Privacy indicator active on device</div>
     </div>
