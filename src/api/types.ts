@@ -39,6 +39,12 @@ export interface LiveTelemetry {
   camera_frames_captured?: number
   camera_frames_uploaded?: number
   pending_command?: { id?: string; name?: string; status?: string } | null
+  express_rgb_bright?: number
+  figma_face_emotion?: string
+  device_figma_emotion?: string
+  dashboard_figma_emotion?: string
+  figma_face_sync_ok?: boolean
+  figma_face_updated_ms?: number
   [key: string]: unknown
 }
 

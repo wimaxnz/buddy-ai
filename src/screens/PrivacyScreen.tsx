@@ -6,7 +6,11 @@ import { Card, Grid, SectionIntro } from '@/components/ui/Card'
 import { TextField, Toggle } from '@/components/ui/Fields'
 import { maskSecret } from '@/api/hooks'
 
-export function PrivacyScreen({ settings, onSaved }: { settings: BuddySettings; onSaved: () => void }) {
+export function PrivacyScreen({ settings, onSaved, focus = 'all' }: {
+  settings: BuddySettings
+  onSaved: () => void
+  focus?: 'all' | 'privacy' | 'security'
+}) {
   const [draft, setDraft] = useState(settings)
   const [saving, setSaving] = useState(false)
 
@@ -25,9 +29,41 @@ export function PrivacyScreen({ settings, onSaved }: { settings: BuddySettings; 
     await postForm('/dashboard/history/clear', new FormData())
   }
 
+  const title = focus === 'security' ? 'Security' : 'Privacy'
+  const subtitle = focus === 'security'
+    ? 'Dashboard and developer access passwords for your home Control Centre.'
+    : 'Camera, microphone, recordings, and family data — you stay in control.'
+
+  if (focus === 'security') {
+    return (
+      <div className="screen screen-enter">
+        <SectionIntro title={title} subtitle={subtitle} />
+        <Grid cols={2}>
+          <Card title="Access passwords">
+            <TextField label="Dashboard password" type="password"
+              value={String(draft.dashboard_password ?? '')}
+              onChange={v => setDraft({ ...draft, dashboard_password: v })}
+              placeholder="Leave empty for LAN dev mode" />
+            <p className="card-copy">Stored password shown masked after save: {maskSecret(draft.dashboard_password)}</p>
+            <TextField label="Developer password" type="password"
+              value={String(draft.developer_password ?? '')}
+              onChange={v => setDraft({ ...draft, developer_password: v })} />
+          </Card>
+          <Card title="Data controls">
+            <p className="card-copy">Destructive actions always ask for confirmation.</p>
+            <div className="button-row">
+              <Button variant="danger" onClick={clearHistory}>Clear conversation history</Button>
+            </div>
+          </Card>
+        </Grid>
+        <SaveBar saving={saving} onSave={save} />
+      </div>
+    )
+  }
+
   return (
-    <div className="screen">
-      <SectionIntro title="Privacy" subtitle="Camera, microphone, recordings, and family data — you stay in control." />
+    <div className="screen screen-enter">
+      <SectionIntro title={title} subtitle={subtitle} />
 
       <Grid cols={2}>
         <Card title="Permissions">

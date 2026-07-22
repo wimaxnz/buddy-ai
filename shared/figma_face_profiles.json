@@ -1,0 +1,338 @@
+{
+  "idle": {
+    "eye": {
+      "openness": 0.82,
+      "pupilX": 0.0,
+      "pupilY": 0.04,
+      "pupilScale": 1.0,
+      "squint": 0.06
+    },
+    "brow": {
+      "leftY": -0.04,
+      "rightY": -0.04,
+      "leftAngle": 0.0,
+      "rightAngle": 0.0,
+      "leftCurve": 0.08,
+      "rightCurve": 0.08
+    },
+    "mouth": {
+      "shape": "tinySmile",
+      "width": 0.96,
+      "openness": 0.0
+    },
+    "cheekOp": 0.28,
+    "glow": "#4fc3f7"
+  },
+  "happy": {
+    "eye": {
+      "openness": 0.52,
+      "pupilX": 0.0,
+      "pupilY": 0.06,
+      "pupilScale": 1.08,
+      "squint": 0.48
+    },
+    "brow": {
+      "leftY": -0.18,
+      "rightY": -0.18,
+      "leftAngle": 5.0,
+      "rightAngle": -5.0,
+      "leftCurve": 0.38,
+      "rightCurve": 0.38
+    },
+    "mouth": {
+      "shape": "smile",
+      "width": 1.08,
+      "openness": 0.25
+    },
+    "cheekOp": 0.68,
+    "glow": "#ffd54f"
+  },
+  "listening": {
+    "eye": {
+      "openness": 0.98,
+      "pupilX": 0.0,
+      "pupilY": -0.08,
+      "pupilScale": 1.04,
+      "squint": 0.0
+    },
+    "brow": {
+      "leftY": -0.28,
+      "rightY": -0.28,
+      "leftAngle": 3.0,
+      "rightAngle": -3.0,
+      "leftCurve": 0.12,
+      "rightCurve": 0.12
+    },
+    "mouth": {
+      "shape": "closed",
+      "width": 0.88,
+      "openness": 0.0
+    },
+    "cheekOp": 0.0,
+    "glow": "#80cbc4"
+  },
+  "thinking": {
+    "eye": {
+      "openness": 0.74,
+      "pupilX": 0.38,
+      "pupilY": -0.52,
+      "pupilScale": 0.92,
+      "squint": 0.08
+    },
+    "brow": {
+      "leftY": -0.48,
+      "rightY": -0.08,
+      "leftAngle": -11.0,
+      "rightAngle": 4.0,
+      "leftCurve": 0.28,
+      "rightCurve": -0.08
+    },
+    "mouth": {
+      "shape": "tinySmile",
+      "width": 0.8,
+      "openness": 0.0
+    },
+    "cheekOp": 0.0,
+    "glow": "#ce93d8"
+  },
+  "speaking": {
+    "eye": {
+      "openness": 0.86,
+      "pupilX": 0.0,
+      "pupilY": 0.0,
+      "pupilScale": 1.0,
+      "squint": 0.04
+    },
+    "brow": {
+      "leftY": -0.1,
+      "rightY": -0.1,
+      "leftAngle": 2.0,
+      "rightAngle": -2.0,
+      "leftCurve": 0.12,
+      "rightCurve": 0.12
+    },
+    "mouth": {
+      "shape": "open",
+      "width": 1.0,
+      "openness": 0.48
+    },
+    "cheekOp": 0.32,
+    "glow": "#4fc3f7"
+  },
+  "curious": {
+    "eye": {
+      "openness": 0.98,
+      "pupilX": 0.18,
+      "pupilY": -0.22,
+      "pupilScale": 1.18,
+      "squint": 0.0
+    },
+    "brow": {
+      "leftY": -0.58,
+      "rightY": -0.08,
+      "leftAngle": -13.0,
+      "rightAngle": 5.0,
+      "leftCurve": 0.42,
+      "rightCurve": -0.08
+    },
+    "mouth": {
+      "shape": "tinySmile",
+      "width": 0.86,
+      "openness": 0.08
+    },
+    "cheekOp": 0.0,
+    "glow": "#81d4fa"
+  },
+  "excited": {
+    "eye": {
+      "openness": 1.0,
+      "pupilX": 0.0,
+      "pupilY": -0.04,
+      "pupilScale": 1.32,
+      "squint": 0.0
+    },
+    "brow": {
+      "leftY": -0.68,
+      "rightY": -0.68,
+      "leftAngle": 6.0,
+      "rightAngle": -6.0,
+      "leftCurve": 0.55,
+      "rightCurve": 0.55
+    },
+    "mouth": {
+      "shape": "wideOpen",
+      "width": 1.18,
+      "openness": 0.88
+    },
+    "cheekOp": 0.8,
+    "glow": "#ffb74d"
+  },
+  "celebrating": {
+    "eye": {
+      "openness": 0.38,
+      "pupilX": 0.0,
+      "pupilY": 0.06,
+      "pupilScale": 1.18,
+      "squint": 0.62
+    },
+    "brow": {
+      "leftY": -0.48,
+      "rightY": -0.48,
+      "leftAngle": 8.0,
+      "rightAngle": -8.0,
+      "leftCurve": 0.58,
+      "rightCurve": 0.58
+    },
+    "mouth": {
+      "shape": "laughing",
+      "width": 1.22,
+      "openness": 0.82
+    },
+    "cheekOp": 0.84,
+    "glow": "#f48fb1"
+  },
+  "worried": {
+    "eye": {
+      "openness": 0.88,
+      "pupilX": 0.0,
+      "pupilY": 0.18,
+      "pupilScale": 0.88,
+      "squint": 0.0
+    },
+    "brow": {
+      "leftY": -0.28,
+      "rightY": -0.28,
+      "leftAngle": 17.0,
+      "rightAngle": -17.0,
+      "leftCurve": -0.48,
+      "rightCurve": -0.48
+    },
+    "mouth": {
+      "shape": "worried",
+      "width": 0.88,
+      "openness": 0.0
+    },
+    "cheekOp": 0.0,
+    "glow": "#90a4ae"
+  },
+  "sad": {
+    "eye": {
+      "openness": 0.6,
+      "pupilX": 0.0,
+      "pupilY": 0.38,
+      "pupilScale": 0.8,
+      "squint": 0.0
+    },
+    "brow": {
+      "leftY": -0.18,
+      "rightY": -0.18,
+      "leftAngle": 22.0,
+      "rightAngle": -22.0,
+      "leftCurve": -0.58,
+      "rightCurve": -0.58
+    },
+    "mouth": {
+      "shape": "worried",
+      "width": 0.84,
+      "openness": 0.0
+    },
+    "cheekOp": 0.0,
+    "glow": "#78909c"
+  },
+  "laughing": {
+    "eye": {
+      "openness": 0.22,
+      "pupilX": 0.0,
+      "pupilY": 0.05,
+      "pupilScale": 1.0,
+      "squint": 0.78
+    },
+    "brow": {
+      "leftY": -0.38,
+      "rightY": -0.38,
+      "leftAngle": 6.0,
+      "rightAngle": -6.0,
+      "leftCurve": 0.52,
+      "rightCurve": 0.52
+    },
+    "mouth": {
+      "shape": "laughing",
+      "width": 1.28,
+      "openness": 0.88
+    },
+    "cheekOp": 0.94,
+    "glow": "#ffd54f"
+  },
+  "love": {
+    "eye": {
+      "openness": 0.5,
+      "pupilX": 0.0,
+      "pupilY": 0.04,
+      "pupilScale": 1.12,
+      "squint": 0.4
+    },
+    "brow": {
+      "leftY": -0.1,
+      "rightY": -0.1,
+      "leftAngle": 4.0,
+      "rightAngle": -4.0,
+      "leftCurve": 0.34,
+      "rightCurve": 0.34
+    },
+    "mouth": {
+      "shape": "smile",
+      "width": 0.98,
+      "openness": 0.08
+    },
+    "cheekOp": 0.9,
+    "glow": "#f48fb1"
+  },
+  "shy": {
+    "eye": {
+      "openness": 0.56,
+      "pupilX": -0.38,
+      "pupilY": 0.3,
+      "pupilScale": 0.82,
+      "squint": 0.22
+    },
+    "brow": {
+      "leftY": 0.1,
+      "rightY": -0.2,
+      "leftAngle": 10.0,
+      "rightAngle": -5.0,
+      "leftCurve": -0.08,
+      "rightCurve": 0.22
+    },
+    "mouth": {
+      "shape": "tinySmile",
+      "width": 0.76,
+      "openness": 0.0
+    },
+    "cheekOp": 0.8,
+    "glow": "#f06292"
+  },
+  "sleeping": {
+    "eye": {
+      "openness": 0.0,
+      "pupilX": 0.0,
+      "pupilY": 0.0,
+      "pupilScale": 0.5,
+      "squint": 0.0
+    },
+    "brow": {
+      "leftY": 0.22,
+      "rightY": 0.22,
+      "leftAngle": 0.0,
+      "rightAngle": 0.0,
+      "leftCurve": 0.0,
+      "rightCurve": 0.0
+    },
+    "mouth": {
+      "shape": "closed",
+      "width": 0.78,
+      "openness": 0.0
+    },
+    "cheekOp": 0.14,
+    "glow": "#5c6bc0"
+  }
+}

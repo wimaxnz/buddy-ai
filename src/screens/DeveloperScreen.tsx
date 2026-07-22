@@ -4,6 +4,7 @@ import { useLiveDataContext } from '@/context/LiveDataContext'
 import { useToast } from '@/context/ToastProvider'
 import { DevCommandGrid } from '@/components/developer/DevCommandGrid'
 import { FacePreviewPanel } from '@/components/developer/FacePreviewPanel'
+import { FaceSyncPanel } from '@/components/developer/FaceSyncPanel'
 import { ProviderPanel } from '@/components/developer/ProviderPanel'
 import { StoryBrainPanel } from '@/components/developer/StoryBrainPanel'
 import { SaveBar } from '@/components/ui/Button'
@@ -100,6 +101,10 @@ export function DeveloperScreen() {
           </Card>
         </Grid>
         <SaveBar saving={saving} onSave={save} label="Save developer settings" />
+      </Collapsible>
+
+      <Collapsible title="Figma face sync" badge="device">
+        <FaceSyncPanel devPassword={devPw} />
       </Collapsible>
 
       <Collapsible title="Test commands & device actions">

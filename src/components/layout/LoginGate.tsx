@@ -50,7 +50,7 @@ export function LoginGate({ onSuccess }: { onSuccess: () => void }) {
           <input type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" placeholder="Leave empty if LAN dev mode" />
         </label>
         {error && <div className="login-error">{error}</div>}
-        <Button disabled={loading}>{loading ? 'Connecting…' : 'Continue'}</Button>
+        <Button type="submit" disabled={loading}>{loading ? 'Connecting…' : 'Continue'}</Button>
       </form>
     </div>
   )

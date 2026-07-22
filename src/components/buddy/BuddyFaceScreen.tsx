@@ -374,6 +374,7 @@ export function mapTelemetryEmotion(live: LiveTelemetry | null | undefined): Emo
     curious: 'curious', excited: 'excited', celebrating: 'celebrating', worried: 'worried', sad: 'sad',
     laughing: 'laughing', love: 'love', shy: 'shy', sleeping: 'sleeping', concerned: 'worried',
     confused: 'curious', proud: 'happy', storytelling: 'happy', encouragement: 'happy', wake: 'happy',
+    surprised: 'excited',
   }
   for (const [k, v] of Object.entries(map)) {
     if (face.includes(k)) return v
@@ -400,8 +401,8 @@ export function BuddyFaceScreen({ live, liveMode = false, compact = false }: {
 
   // Breathing ΓÇö slower and deeper when sleeping
   useEffect(() => {
-    const speed = isSleeping ? 0.006 : 0.016
-    const amp   = isSleeping ? 4.8 : 3.2
+    const speed = isSleeping ? 0.005 : 0.009
+    const amp   = isSleeping ? 2.0 : 1.4
     const tick = () => { bt.current += speed; setBreathe(Math.sin(bt.current) * amp); requestAnimationFrame(tick) }
     const id = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(id)
@@ -414,7 +415,7 @@ export function BuddyFaceScreen({ live, liveMode = false, compact = false }: {
       const timer = setTimeout(() => {
         setBlink(true)
         setTimeout(() => { setBlink(false); go() }, 120)
-      }, 2400 + Math.random() * 3600)
+      }, 3000 + Math.random() * 5000)
       return timer
     }
     const timer = go()

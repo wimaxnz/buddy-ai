@@ -7,7 +7,7 @@ import { SaveBar } from '@/components/ui/Button'
 import { Card, FutureBadge, Grid, SectionIntro, StatusChip, StatusRow } from '@/components/ui/Card'
 import { SliderField, Toggle } from '@/components/ui/Fields'
 
-export function CameraScreen() {
+export function CameraScreen({ focus = 'all' }: { focus?: 'all' | 'preview' | 'recognition' }) {
   const { live, settings, refreshSettings } = useLiveDataContext()
   const toast = useToast()
   const [draft, setDraft] = useState(settings)
@@ -36,9 +36,63 @@ export function CameraScreen() {
   const qualityLabel = live?.camera_init_ok ? 'Good' : live?.camera_enabled ? 'Starting' : 'Off'
   const connection = live?.online ? (live.camera_active ? 'Streaming' : 'Connected, waiting') : 'Device offline'
 
+  const title = focus === 'preview' ? 'Camera Preview' : focus === 'recognition' ? 'Face Recognition' : 'Camera'
+  const subtitle = focus === 'preview'
+    ? 'Live stream from Buddy with privacy and connection indicators.'
+    : focus === 'recognition'
+      ? 'Face detection and recognition settings — enrolment coming soon.'
+      : 'Live view from Buddy with clear privacy and quality indicators.'
+
+  if (focus === 'preview') {
+    return (
+      <div className="screen screen-enter camera-screen">
+        <SectionIntro title={title} subtitle={subtitle} />
+        <Card title="Live preview" action={<StatusChip label={connection} tone={live?.camera_active ? 'green' : 'yellow'} />}>
+          <CameraPreview enabled={enabled && preview} fps={Number(draft.camera_fps ?? 3)} large />
+          <div className="camera-indicators">
+            <StatusChip label={enabled ? 'Camera on' : 'Camera off'} tone={enabled ? 'green' : 'neutral'} />
+            <StatusChip label="Privacy active on device" tone="blue" />
+            {live?.camera_active && <StatusChip label="Capturing" tone="green" />}
+          </div>
+        </Card>
+        <Grid cols={2}>
+          <Card title="Status">
+            <StatusRow label="Connection" value={connection} />
+            <StatusRow label="FPS actual" value={live?.camera_fps_actual != null ? String(live.camera_fps_actual) : '—'} />
+            <StatusRow label="Last frame" value={live?.camera_last_frame_bytes ? `${live.camera_last_frame_bytes} bytes` : '—'} />
+          </Card>
+          <Card title="Preview controls">
+            <Toggle label="Dashboard preview" checked={preview} onChange={v => set('camera_preview_enabled', v)} />
+            <SaveBar saving={saving} onSave={save} label="Save preview" />
+          </Card>
+        </Grid>
+      </div>
+    )
+  }
+
+  if (focus === 'recognition') {
+    return (
+      <div className="screen screen-enter camera-screen">
+        <SectionIntro title={title} subtitle={subtitle} />
+        <Grid cols={2}>
+          <Card title="Face detection" action={<FutureBadge />}>
+            <p className="card-copy">Recognition and enrolment UI will appear here when Phase 2 ships. Toggle prepares the device setting.</p>
+            <Toggle label="Face recognition" checked={!!draft.face_recognition_enabled} onChange={v => set('face_recognition_enabled', v)} />
+            <StatusRow label="Recognised user" value={String(live?.recognised_user || '—')} />
+          </Card>
+          <Card title="Camera status">
+            <StatusRow label="Camera" value={enabled ? 'Enabled' : 'Disabled'} ok={enabled} />
+            <StatusRow label="Init" value={live?.camera_init_ok ? 'Ready' : 'Not ready'} ok={!!live?.camera_init_ok} />
+            <SaveBar saving={saving} onSave={save} label="Save recognition" />
+          </Card>
+        </Grid>
+      </div>
+    )
+  }
+
   return (
     <div className="screen screen-enter camera-screen">
-      <SectionIntro title="Camera" subtitle="Live view from Buddy with clear privacy and quality indicators." />
+      <SectionIntro title={title} subtitle={subtitle} />
 
       <div className="camera-layout">
         <Card title="Live preview" action={<StatusChip label={connection} tone={live?.camera_active ? 'green' : 'yellow'} />}>
