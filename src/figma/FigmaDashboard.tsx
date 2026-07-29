@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
+import { devCommand } from '@/api/client'
 import { useLiveDataContext } from '@/context/LiveDataContext'
+import { useToast } from '@/context/ToastProvider'
 import type { LiveTelemetry } from '@/api/types'
 import { mapTelemetryEmotion } from '@/components/buddy/BuddyFaceScreen'
 import { FigmaScreenRouter } from '@/figma/FigmaScreenRouter'
@@ -1090,6 +1092,8 @@ const AROUSAL_PRESETS = [
 
 function BuddyFaceScreen() {
   const { live, settings } = useLiveDataContext()
+  const toast = useToast()
+  const manualLock = useRef(false)
   const [emo, setEmo] = useState<Emotion2>('idle')
   const [prev, setPrev] = useState<Emotion2>('idle')
   const [t, setT] = useState(1)
@@ -1151,8 +1155,23 @@ function BuddyFaceScreen() {
     requestAnimationFrame(anim)
   }
 
+  const sendToDevice = async (next: Emotion2) => {
+    manualLock.current = true
+    switchEmo(next)
+    if (!live?.online) {
+      toast.error('Device offline — connect Buddy to Wi‑Fi first.')
+      return
+    }
+    try {
+      await devCommand('sync_figma_face', next, String(settings?.developer_password ?? ''))
+      toast.success(`Showing ${next} on device…`)
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Could not send expression')
+    }
+  }
+
   useEffect(() => {
-    if (!live) return
+    if (!live || manualLock.current) return
     const next = mapTelemetryEmotion(live)
     if (next !== emo) switchEmo(next)
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1304,13 +1323,26 @@ function BuddyFaceScreen() {
 
       {/* ── Emotion grid ── */}
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 14 }}>Expression Library</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+          <div style={{ fontSize: 13, fontWeight: 600 }}>Expression Library</div>
+          <button type="button" onClick={() => { manualLock.current = false }}
+            style={{
+              padding: '4px 10px', borderRadius: 8, fontSize: 10, cursor: 'pointer',
+              border: '1px solid var(--border-subtle)', background: 'transparent',
+              color: 'var(--text-tertiary)',
+            }}>
+            Follow live device
+          </button>
+        </div>
+        <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginBottom: 10 }}>
+          Tap an expression to show it on Buddy&apos;s screen (~45s preview).
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
           {EMOTIONS2.map(e => {
             const active = e === emo
             const g = FACE_EMOTIONS[e].glow
             return (
-              <button key={e} onClick={() => switchEmo(e)} style={{
+              <button key={e} type="button" onClick={() => sendToDevice(e)} style={{
                 padding: '10px 8px', borderRadius: 'var(--r-lg)',
                 border: `1px solid ${active ? g : 'var(--border-subtle)'}`,
                 background: active ? `${g}18` : 'var(--surface-2)',

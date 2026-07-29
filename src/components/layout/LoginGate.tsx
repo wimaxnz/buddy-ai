@@ -41,6 +41,9 @@ export function LoginGate({ onSuccess }: { onSuccess: () => void }) {
         <div className="login-logo">B</div>
         <h1>Buddy AI</h1>
         <p>Sign in to your home Control Centre</p>
+        <p style={{ margin: 0, fontSize: 11, color: 'var(--text-tertiary)' }}>
+          Username <strong>parent</strong> · password from Security settings (default LAN: leave empty)
+        </p>
         <label className="field">
           <span className="field-label">Username</span>
           <input value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" />

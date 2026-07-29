@@ -240,8 +240,12 @@ export function FigmaStoriesScreen() {
         <Card title="Story settings">
           <Toggle label="Sleep mode" checked={!!draft.sleep_mode_enabled} onChange={v => set('sleep_mode_enabled', v)} />
           <TextField label="Bedtime" value={String(draft.bedtime ?? '20:00')} onChange={v => set('bedtime', v)} />
-          <SelectField label="Idle display" value={String(draft.idle_display_mode ?? 'clock')}
-            options={[{ value: 'clock', label: 'Clock' }, { value: 'face', label: 'Face' }, { value: 'off', label: 'Dim' }]}
+          <SelectField label="Idle display" value={String(draft.idle_display_mode ?? 'face')}
+            options={[
+              { value: 'face', label: 'Buddy face' },
+              { value: 'clock', label: 'Clock' },
+              { value: 'alternate', label: 'Alternate face / clock' },
+            ]}
             onChange={v => set('idle_display_mode', v)} />
           <SliderField label="Idle timeout (s)" value={Number(draft.idle_clock_timeout_sec ?? 8)} min={3} max={60} onChange={v => set('idle_clock_timeout_sec', v)} />
         </Card>

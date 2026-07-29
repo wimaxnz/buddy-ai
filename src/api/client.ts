@@ -1,4 +1,5 @@
 import type { BuddySettings, HealthResponse, LiveTelemetry, ParentStatus, WeatherLive } from './types'
+import { normalizeClockLayout } from '@/lib/clockLayouts'
 
 const AUTH_KEY = 'buddy_dashboard_auth'
 
@@ -133,6 +134,11 @@ export async function postEmpty(url: string) {
   return res.json().catch(() => ({}))
 }
 
+/** Ask the device to re-fetch settings immediately after a dashboard save. */
+export async function queueDeviceRefresh() {
+  return postEmpty('/parent/device-refresh')
+}
+
 export async function fetchProviders() {
   return request<Record<string, unknown>>('/dashboard/providers')
 }
@@ -201,7 +207,7 @@ export function buildParentSettingsForm(s: BuddySettings): FormData {
   fd.set('expression_intensity', num('expression_intensity', 0.85))
   fd.set('blink_frequency', num('blink_frequency', 1))
   fd.set('mouth_animation_strength', num('mouth_animation_strength', 0.85))
-  fd.set('idle_display_mode', str('idle_display_mode', 'clock'))
+  fd.set('idle_display_mode', str('idle_display_mode', 'face'))
   fd.set('idle_clock_timeout_sec', num('idle_clock_timeout_sec', 8))
   fd.set('clock_style', str('clock_style', 'sunny'))
   fd.set('clock_bg_color', str('clock_bg_color', '#08122A'))
@@ -222,7 +228,7 @@ export function buildParentSettingsForm(s: BuddySettings): FormData {
   fd.set('clock_hand_thickness_second', num('clock_hand_thickness_second', 2))
   fd.set('clock_tick_size', num('clock_tick_size', 12))
   fd.set('clock_second_mode', str('clock_second_mode', 'step'))
-  fd.set('clock_layout', str('clock_layout', 'classic_analog'))
+  fd.set('clock_layout', normalizeClockLayout(str('clock_layout', 'classic_analog')))
   chk('clock_show_seconds')
   fd.set('clock_readability_preset', str('clock_readability_preset', 'normal'))
   chk('clock_high_contrast')
@@ -287,7 +293,9 @@ export function buildParentSettingsForm(s: BuddySettings): FormData {
 }
 
 export async function saveParentSettings(s: BuddySettings) {
-  return postForm('/dashboard/parent-settings', buildParentSettingsForm(s))
+  const res = await postForm('/dashboard/parent-settings', buildParentSettingsForm(s))
+  await queueDeviceRefresh().catch(() => {})
+  return res
 }
 
 export function buildDevSettingsForm(s: BuddySettings): FormData {

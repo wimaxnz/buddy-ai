@@ -1,7 +1,9 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { devCommand } from '@/api/client'
 import type { LiveTelemetry } from '@/api/types'
+import type { Emotion2 } from '@/components/buddy/BuddyFaceScreen'
 import { mapTelemetryEmotion, BuddyFaceScreen } from '@/components/buddy/BuddyFaceScreen'
+import { ExpressionDeviceGrid } from '@/components/developer/ExpressionDeviceGrid'
 import { useLiveDataContext } from '@/context/LiveDataContext'
 import { useToast } from '@/context/ToastProvider'
 import { Button } from '@/components/ui/Button'
@@ -27,7 +29,8 @@ function devicePreviewLive(live: LiveTelemetry | null, deviceEmotion: string): L
 export function FaceSyncPanel({ devPassword }: { devPassword?: string }) {
   const { live } = useLiveDataContext()
   const toast = useToast()
-  const dashboardEmotion = mapTelemetryEmotion(live)
+  const [picked, setPicked] = useState<Emotion2 | null>(null)
+  const dashboardEmotion = picked ?? mapTelemetryEmotion(live)
   const deviceEmotion = String(live?.device_figma_emotion || live?.figma_face_emotion || '—')
   const deviceLive = useMemo(() => devicePreviewLive(live, deviceEmotion), [live, deviceEmotion])
   const syncOk = Boolean(live?.figma_face_sync_ok) || (deviceEmotion !== '—' && dashboardEmotion === deviceEmotion)
@@ -59,6 +62,9 @@ export function FaceSyncPanel({ devPassword }: { devPassword?: string }) {
           <StatusRow label="ExpressProfile" value={String(live?.express_profile || '—')} />
         </Card>
       </Grid>
+      <Card title="All expressions on device">
+        <ExpressionDeviceGrid devPassword={devPassword} active={picked ?? undefined} onPick={setPicked} />
+      </Card>
       <Card title="Figma face sync">
         <StatusRow label="Dashboard expression" value={dashboardEmotion} />
         <StatusRow label="Device expression" value={deviceEmotion} />
@@ -68,7 +74,7 @@ export function FaceSyncPanel({ devPassword }: { devPassword?: string }) {
         <StatusRow label="Recognised" value={String(live?.recognised_user || '—')} />
         <StatusRow label="Firmware" value={String(live?.firmware_build || '—')} />
         <div className="button-row" style={{ marginTop: 12 }}>
-          <Button variant="primary" onClick={sync}>Sync dashboard face to device</Button>
+          <Button variant="primary" onClick={sync}>Sync current preview to device</Button>
         </div>
       </Card>
     </div>

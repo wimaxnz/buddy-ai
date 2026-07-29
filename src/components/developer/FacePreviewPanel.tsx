@@ -1,31 +1,15 @@
-import { devCommand } from '@/api/client'
-import { useToast } from '@/context/ToastProvider'
-import { Button } from '@/components/ui/Button'
-
-const FACE_STATES = [
-  'idle', 'wake', 'listening', 'thinking', 'speaking',
-  'storytelling', 'encouragement', 'concerned', 'confused', 'sleeping',
-]
+import { FIGMA_EXPRESSIONS, FIGMA_EXPRESSION_EMOJI } from '@/components/buddy/BuddyFaceScreen'
+import { ExpressionDeviceGrid } from '@/components/developer/ExpressionDeviceGrid'
 
 export function FacePreviewPanel({ devPassword }: { devPassword?: string }) {
-  const toast = useToast()
-  const run = async (state: string) => {
-    try {
-      await devCommand('face_preview', state, devPassword)
-      toast.success(`Face preview: ${state}`)
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Failed')
-    }
-  }
   return (
     <div className="buddy-card">
-      <h3>Face state preview (device)</h3>
-      <p className="card-copy">Queues face_preview on CoreS3 — watch Express face in Live panel.</p>
-      <div className="button-row wrap">
-        {FACE_STATES.map(s => (
-          <Button key={s} variant="soft" onClick={() => run(s)}>{s}</Button>
-        ))}
-      </div>
+      <h3>Figma expression preview (device)</h3>
+      <ExpressionDeviceGrid devPassword={devPassword} />
+      <p className="card-copy" style={{ marginTop: 12, fontSize: 12, opacity: 0.8 }}>
+        Sends all {FIGMA_EXPRESSIONS.length} Figma expressions:{' '}
+        {FIGMA_EXPRESSIONS.map(e => `${FIGMA_EXPRESSION_EMOJI[e]} ${e}`).join(', ')}
+      </p>
     </div>
   )
 }

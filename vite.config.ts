@@ -11,11 +11,7 @@ export default defineConfig(({ mode }) => {
   const emitSourcemaps = mode === 'development'
 
   return {
-    base: process.env.FIGMA_PUBLIC_URL
-      ? `${process.env.FIGMA_PUBLIC_URL}/`
-      : mode === 'production'
-        ? '/dashboard/'
-        : '/',
+    base: process.env.FIGMA_PUBLIC_URL ? `${process.env.FIGMA_PUBLIC_URL}/` : '/dashboard/',
     build: {
       sourcemap: emitSourcemaps ? 'inline' : false,
       minify: !emitSourcemaps,
@@ -38,14 +34,6 @@ export default defineConfig(({ mode }) => {
       port: parseInt(process.env.PORT || '8443'),
       strictPort: true,
       watch: { ignored: ['**/.figma/**'] },
-      proxy: {
-        '/parent': { target: process.env.BUDDY_API || 'http://127.0.0.1:8000', changeOrigin: true },
-        '/dashboard': { target: process.env.BUDDY_API || 'http://127.0.0.1:8000', changeOrigin: true },
-        '/device': { target: process.env.BUDDY_API || 'http://127.0.0.1:8000', changeOrigin: true },
-        '/camera': { target: process.env.BUDDY_API || 'http://127.0.0.1:8000', changeOrigin: true },
-        '/dev': { target: process.env.BUDDY_API || 'http://127.0.0.1:8000', changeOrigin: true },
-        '/health': { target: process.env.BUDDY_API || 'http://127.0.0.1:8000', changeOrigin: true },
-      },
     },
     preview: {
       host: '0.0.0.0',

@@ -308,7 +308,8 @@ function FaceMouth({ m, amp }: { m: MouthS; amp: number }) {
 }
 
 const EMOTIONS2 = Object.keys(FACE_EMOTIONS) as Emotion2[]
-const EMOJI2: Record<Emotion2,string> = {
+export const FIGMA_EXPRESSIONS = EMOTIONS2
+export const FIGMA_EXPRESSION_EMOJI: Record<Emotion2, string> = {
   idle:'≡ƒÿè',happy:'≡ƒÿä',listening:'≡ƒæé',thinking:'≡ƒñö',speaking:'≡ƒÆ¼',
   curious:'≡ƒºÉ',excited:'≡ƒñ⌐',celebrating:'≡ƒÄë',worried:'≡ƒÿƒ',sad:'≡ƒÿó',
   laughing:'≡ƒÿé',love:'Γ¥ñ∩╕Å',shy:'≡ƒÖê',sleeping:'≡ƒÆñ'
@@ -553,7 +554,7 @@ export function BuddyFaceScreen({ live, liveMode = false, compact = false }: {
 
             {/* State label */}
             <div style={{ position:'absolute',bottom:8,left:'50%',transform:'translateX(-50%)',fontSize:10,color:'#ffffff30',letterSpacing:'.14em',textTransform:'uppercase',userSelect:'none' }}>
-              {EMOJI2[emo]} {emo}
+              {FIGMA_EXPRESSION_EMOJI[emo]} {emo}
             </div>
           </div>
         </div>
@@ -622,7 +623,7 @@ export function BuddyFaceScreen({ live, liveMode = false, compact = false }: {
                 transition: 'all .2s cubic-bezier(0.34,1.56,0.64,1)',
                 transform: active ? 'scale(1.05)' : 'scale(1)',
               }}>
-                <div style={{ fontSize: 20, marginBottom: 4 }}>{EMOJI2[e]}</div>
+                <div style={{ fontSize: 20, marginBottom: 4 }}>{FIGMA_EXPRESSION_EMOJI[e]}</div>
                 <div style={{ fontSize: 10, textTransform: 'capitalize', fontWeight: 500 }}>{e}</div>
               </button>
             )
